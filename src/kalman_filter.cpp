@@ -1,7 +1,7 @@
 #include "kalman_filter.h"
 #include <iostream>
 #include <cmath>
-using std::atan;
+using std::atan2;
 using std::cout;
 using std::endl;
 using Eigen::MatrixXd;
@@ -65,7 +65,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     cout << "px: " << px << endl;
     return;
   }
-  z_pred << c, atan(py / px), (px*vx + py * vy) / c;
+  z_pred << c, atan2(py, px), (px*vx + py * vy) / c;
   VectorXd y = z - z_pred;
   
   if (y[1] > M_PI || y[1] < -M_PI) {
