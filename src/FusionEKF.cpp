@@ -85,9 +85,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       float ro_dot = measurement_pack.raw_measurements_[2];
       float px = ro * cos(theta);
       float py = ro * sin(theta);
-      float vx = ro_dot * cos(theta);
-      float vy = ro_dot * sin(theta);
-      ekf_.x_ << px, py, vx, vy;
+      //float vx = ro_dot * cos(theta);
+      //float vy = ro_dot * sin(theta);
+      ekf_.x_ << px, py, 0, 0;
       previous_timestamp_ = measurement_pack.timestamp_;
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {

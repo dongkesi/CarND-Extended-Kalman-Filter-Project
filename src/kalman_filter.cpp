@@ -59,13 +59,23 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   float vx = x_(2);
   float vy = x_(3);
   float c = sqrt(px * px + py * py);
-  if (fabs(c) < 0.0001 || px < 0.0001) {
-    cout << "Update EKF Error!" << endl;
+  if (fabs(c) < 0.0001 || fabs(px) < 0.0001) {
+    cout << "Update EKF Error!" << " c:" << c << " px: " << px << endl;
     return;
   }
   z_pred << c, atan(py / px), (px*vx + py * vy) / c;
-
   VectorXd y = z - z_pred;
+  
+  if (y[1] > M_PI || y[1] < -M_PI) {
+    cout << "EKF z: " << z << endl;
+    cout << "EKF z_pred" << z_pred << endl;
+    cout << "EKF y" << y << endl;
+    if (y[1] > M_PI)
+      y[1] -= M_PI;
+    else
+      y[1] += M_PI;
+    cout << "EKF y[1]" << y[1] << endl;
+  }
   MatrixXd S = H_ * P_ * H_.transpose() + R_;
   MatrixXd K = P_ * H_.transpose() * S.inverse();
   x_ = x_ + K * y;
